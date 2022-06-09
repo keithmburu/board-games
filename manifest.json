@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "short_name": "BoardGames",
+    "name": "Tic-Tac-Toe, Connect Four, Scrabble",
+    "version": "1.0",
+    "action": {
+      "default_popup": "build/index.html",
+      "default_icon": 
+      {
+        "16": "build/logo512.png",
+        "32": "build/logo512.png",
+        "48": "build/logo512.png",
+        "128": "build/logo512.png"
+      }
+    },
+    "icons": 
+      {
+        "16": "build/logo192.png",
+        "32": "build/logo192.png",
+        "48": "build/logo192.png",
+        "128": "build/logo192.png"
+      }
+  }
+  

@@ -49,7 +49,7 @@ class Board extends React.Component {
       circleColor = "white";
     }
     return <div id={"square"+squareNum} className="square"
-                style={{border:"4px solid "+this.props.borderColor[this.props.game], backgroundColor:squareColor}}>
+                style={{border:"2px solid "+this.props.borderColor[this.props.game], backgroundColor:squareColor}}>
             <div id={"circle"+squareNum} className="circleDiv" style={{backgroundColor: circleColor}}>
               <Square 
                 game={this.props.game}
@@ -109,7 +109,7 @@ class Board extends React.Component {
     if (this.props.game == 1) {
       dimension = r*50;
     } else {
-      dimension = r*41;
+      dimension = r*37;
     }
     return <div id="board" style={{height: `${dimension}px`, width: `${dimension}px`}}>{board}</div>;
   }
@@ -224,20 +224,10 @@ class ScoreBoard extends React.Component {
                   <thead>
                     <tr>
                       <th className="player" style={{backgroundColor:"yellow", cursor:"pointer"}}
-                          onClick={() => {
-                            if (this.props.player1DeckSize == 7 && this.props.player2DeckSize == 7) {
-                              this.props.handleTurnChange(0);
-                            }
-                          }
-                        }>
+                          onClick={() => this.props.onClick(0)}>
                         Player 1</th>
                       <th className="player" style={{backgroundColor:"orange", cursor:"pointer"}}
-                          onClick={() => {
-                            if (this.props.player1DeckSize == 7 && this.props.player2DeckSize == 7) {
-                              this.props.handleTurnChange(1);
-                            }
-                          }
-                        }>
+                          onClick={() => this.props.onClick(1)}>
                         Player 2</th>
                     </tr>
                   </thead>
@@ -324,7 +314,7 @@ class Game extends React.Component {
           let newPlayer1Tiles = current.player1Tiles.slice();
           let newPlayer1DeckSize = current.player1DeckSize;
           let newPlayer2Tiles = current.player2Tiles.slice();
-          let newPlayer2DeckSize= current.player2DeckSize;
+          let newPlayer2DeckSize = current.player2DeckSize;
           if (current.player1DeckSize < 7) {
             for (let i = 0; i < 7; i++) {
               if (newPlayer1Tiles[i] == "") {
@@ -374,8 +364,6 @@ class Game extends React.Component {
         if (current.tilesLeft[squareVal] == 0) {
           document.getElementById("tile"+squareNum+deck).style.background = "grey"; 
         } 
-      } else {
-        console.log(`No ${squareVal}'s left`);
       }
     } else {
       if ((deck == 1) != current.player1IsNext) {
@@ -393,27 +381,31 @@ class Game extends React.Component {
             squareNum: squareNum,
           });
         } else {
-          newRefill = current.refill + 1;
-          newHistory = newHistory.concat([{
-            squares: current.squares,
-            row: current.row,
-            col: current.col,
-            score: current.score,
-            scrabbleWord: current.scrabbleWord,
-            wordMultiplier: current.wordMultiplier,
-            scrabblePoints: current.scrabblePoints,
-            player1IsNext: current.player1IsNext,
-            player1DeckSize: current.player1DeckSize,
-            player2DeckSize: current.player2DeckSize,
-            player1Tiles: current.player1Tiles,
-            player2Tiles: current.player2Tiles,
-            refill: newRefill,
-            tilesLeft: current.tilesLeft
-          }]);
-          this.setState({history: newHistory,
-                         stepNumber: newHistory.length,
-                         scrabbleLetter: squareVal,
-                         squareNum: squareNum,});
+          let playerTiles = (deck == 1)? current.player1Tiles : current.player2Tiles;
+          if (playerTiles[squareNum] != "") {
+          if (current.player)
+            newRefill = current.refill + 1;
+            newHistory = newHistory.concat([{
+              squares: current.squares,
+              row: current.row,
+              col: current.col,
+              score: current.score,
+              scrabbleWord: current.scrabbleWord,
+              wordMultiplier: current.wordMultiplier,
+              scrabblePoints: current.scrabblePoints,
+              player1IsNext: current.player1IsNext,
+              player1DeckSize: current.player1DeckSize,
+              player2DeckSize: current.player2DeckSize,
+              player1Tiles: current.player1Tiles,
+              player2Tiles: current.player2Tiles,
+              refill: newRefill,
+              tilesLeft: current.tilesLeft
+            }]);
+            this.setState({history: newHistory,
+                          stepNumber: newHistory.length,
+                          scrabbleLetter: squareVal,
+                          squareNum: squareNum,});
+          }
         }
       }
     }
@@ -533,7 +525,6 @@ class Game extends React.Component {
       }
     }
     let squareNums = newSquareNums;
-    console.log(squareNums);
     let gap;
     if (squareNums[1] - squareNums[0] < 15) {
       gap = 1;
@@ -559,7 +550,6 @@ class Game extends React.Component {
       }
     }
     for (let i = this.state.squareNums[0]-gap; i >= 0; i-=gap) {
-      console.log(newScrabbleWord);
       if (current.squares[2][i] != null) {
         newScrabbleWord = current.squares[2][i] + newScrabbleWord;
         newScrabblePoints += pointVals[current.squares[2][i]];
@@ -788,7 +778,11 @@ class Game extends React.Component {
               <ScoreBoard
                 game={this.state.game}
                 score={current.score}
-                handleTurnChange={(i) => this.handleTurnChange(i)} />
+                onClick={(i) => {
+                  if (current.player1DeckSize == 7 && current.player2DeckSize == 7) {
+                    this.handleTurnChange(i);
+                  }
+                }}/>
               {this.state.game == 2 && <div id="pointsMultDiv">
                 <div className="pointsMult" style={{backgroundColor: "lightblue"}}>2x Letter value</div>
                 <div className="pointsMult" style={{backgroundColor: "dodgerblue"}}>3x Letter value</div>

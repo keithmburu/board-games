@@ -26,25 +26,24 @@ function Connect4Button(props) {
 
 class Board extends React.Component {
   renderSquare(squareNum, squareVal) {
-    let color = "none";
+    let squareColor;
+    let circleColor;
     if (this.props.game == 2) {
       let pinkSquares = [16, 32, 48, 64, 28, 42, 56, 70, 154, 168, 182, 196, 160, 176, 192, 208, 112];
       let redSquares = [0, 7, 14, 105, 119, 210, 217, 224];
       let darkBlueSquares = [20, 24, 200, 204, 76, 136, 80, 140, 84, 144, 88, 148];
-      let lightblueSquares = [36, 52, 38, 11, 3, 92, 108, 122, 165, 45, 186, 172, 188, 213, 221, 132, 116, 102, 59, 179, 96, 126, 128, 98];
+      let lightBlueSquares = [36, 52, 38, 11, 3, 92, 108, 122, 165, 45, 186, 172, 188, 213, 221, 132, 116, 102, 59, 179, 96, 126, 128, 98];
       if (pinkSquares.includes(squareNum)) {
-        color = "pink";
+        squareColor = "pink";
       } else if (redSquares.includes(squareNum)) {
-        color = "red";
+        squareColor = "red";
       } else if (darkBlueSquares.includes(squareNum)) {
-        color = "dodgerblue";
-      } else if (lightblueSquares.includes(squareNum)) {
-        color = "lightblue";
+        squareColor = "dodgerblue";
+      } else if (lightBlueSquares.includes(squareNum)) {
+        squareColor = "lightblue";
       }   
-    }
-    let squareColor =  color;
-    let circleColor = "none";
-    if (this.props.game == 1) {
+      circleColor = "transparent";
+    } else if (this.props.game == 1) {
       squareColor = this.props.borderColor[this.props.game];
       circleColor = "white";
     }
@@ -89,6 +88,9 @@ class Board extends React.Component {
     }
     let shape = (this.props.game == 1)? "circle" : "square";
     for (let squareNum = 0; squareNum < renderedSquares; squareNum++) {
+      if (squareNum == 20) {
+        console.log("in", document.getElementById("square"+squareNum).style.background);
+      }
       if (document.getElementById(shape+squareNum)) {
         if (this.props.game != 2 && this.props.squares[this.props.game][squareNum] === null) {
           document.getElementById(shape+squareNum).style.background = "white";
@@ -103,6 +105,9 @@ class Board extends React.Component {
             }
           }
         }
+      }
+      if (squareNum == 20) {
+        console.log("out", document.getElementById("square"+squareNum).style.background);
       }
     }
     let dimension;
@@ -453,9 +458,6 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber+1);
     const current = history[history.length - 1];
     const newSquares = current.squares[2].slice();
-    // if (calculateScrabbleWinner(newSquares)[0] || newSquares[i]) {
-    //   return;
-    // }
     newSquares[i] = letter;
     let pointVals= {A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10, " ": 0};
     let letterValue = pointVals[letter];
@@ -605,21 +607,6 @@ class Game extends React.Component {
   }
 
   handleGameChange = (event) => {
-    let renderedSquares;
-    if (document.getElementById("square"+224)) {
-      renderedSquares = 225;
-    } else if (document.getElementById("square"+41)) {
-      renderedSquares = 42;
-    } else {
-      renderedSquares = 9;
-    }
-    for (let squareNum = 0; squareNum < renderedSquares; squareNum++) {
-        document.getElementById("square"+squareNum).style.background = (event.target.value == 1)? "dodgerblue" : "white";
-        if (this.state.game == 1) {
-          document.getElementById("circle"+squareNum).style.background = "none";
-        }
-    }
-    
     this.setState({
       history: [{
         squares: [Array(9).fill(null), Array(42).fill(null), Array(225).fill(null)],

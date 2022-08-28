@@ -1,8 +1,10 @@
-# Tic-Tac-Toe, Connect Four, and Scrabble 
+# Scrabble, Connect Four, and Tic-Tac-Toe 
 
 Suite of online board games built using Javascript, ReactJS, and CSS, with a corresponding browser extension for playing quick rounds.
 
 https://board-games-1.netlify.app
+
+![demo](demo.png)
 
 
 ## To run locally

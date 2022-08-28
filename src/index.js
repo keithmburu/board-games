@@ -273,7 +273,7 @@ class Game extends React.Component {
       squareNum: 0,
       squareNums: [],
       scrabbleLetter: "",
-      game: 0, // 0 = Tic-Tac-Toe, 1 = Connect Four, 2 = Scrabble
+      game: 2, // 0 = Tic-Tac-Toe, 1 = Connect Four, 2 = Scrabble
       chronological: true,
       newTurn: false,
     };

@@ -1,10 +1,13 @@
 # Tic-Tac-Toe, Connect Four, and Scrabble 
 
-Three interactive web apps built using ReactJS.
+Suite of online board games built using Javascript, ReactJS, and CSS, with a corresponding browser extension for playing quick rounds.
 
-## Scripts
+https://board-games-1.netlify.app
 
-In the project directory, you can run:
+
+## To run locally
+
+In the project directory, use the following commands:
 
 ### `npm start`
 

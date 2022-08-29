@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import { Tiles, ScoreBoard, ScrabbleBorderLine, calculateScrabbleWinner } from './scrabble.js'
+import { Connect4Input, calculateConnect4Winner } from './connect4.js'
+import { calculateTTTWinner } from './tic-tac-toe.js'
+
 
 function Square(props) {
   return (
@@ -10,17 +14,6 @@ function Square(props) {
     {(props.game != 1)? props.value : null}
     </button>
   ); 
-}
-
-
-function Connect4Button(props) {
-  return (
-      <button
-        id={props.id}
-        className="connect4Button"
-        onClick={props.onClick}>
-      </button>
-  );
 }
 
 
@@ -121,134 +114,6 @@ class Board extends React.Component {
 }
 
 
-class Connect4Input extends React.Component {
-  renderConnect4Button(i) {
-    return <Connect4Button 
-              id={"connect"+i}
-              onClick={() => this.props.onClick(i)}/>;
-  }
-
-  render() {
-    if ((this.props.game != 1)) {
-      return <div></div>;
-    } else {
-      let inputs = [];
-      let row = []
-      for (let i = 0; i < 7; i++) {
-        row.push(this.renderConnect4Button(i));
-      }
-      inputs.push(<div> {row} </div>);
-      return inputs;
-    }
-  }
-}
-
-
-class ScrabbleBorderLine extends React.Component {
-  renderBorderSquare(value) {
-    return <div className={this.props.orientation+"BorderSquare"}>{value}</div>;
-  }
-
-  render() {
-    if ((this.props.game != 2)) {
-      return <div></div>;
-    } else {
-      let border = [];
-      let row = [];
-      if (this.props.orientation == "horizontal") {
-        let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"];
-        for (let i = 0; i < 15; i++) {
-          row.push(this.renderBorderSquare(letters[i]));
-        }
-        border.push(<div>{row}</div>);
-      } else {
-        for (let i = 1; i <= 15; i++) {
-          border.push(<div>{this.renderBorderSquare(i)}</div>);
-        }
-      }
-      return <div className={this.props.orientation+"Border"}>{border}</div>;
-    }
-  }
-}
-
-
-class Tiles extends React.Component {
-  renderTileSquare(squareNum, squareVal, deck) {
-    let pointVals= {A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10, "?": 0, "": ""};
-    return <button id={"tile"+squareNum+deck} className="tileDiv"
-                    onClick={() => this.props.onClick(squareNum, squareVal, deck)}>
-              {squareVal}<span style={{fontSize: 12}}>{" "+pointVals[squareVal]}</span><span>{(deck == 0)? " : "+this.props.tilesLeft[squareVal] : ""}</span>
-          </button>;
-  }
-
-  render() {
-    if ((this.props.game != 2)) {
-      return <div></div>;
-    } else {
-      let board = [];
-      for (let i = 0; i < 3; i++) {
-        let row = [];
-        if (i == 0) {
-          let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "?"];
-          for (let j = 0; j < 9; j++) {
-            row.push(this.renderTileSquare(j, letters[j], i));
-          }
-          row.push(<div className="lineBreak"></div>);
-          for (let j = 9; j < 18; j++) {
-            row.push(this.renderTileSquare(j, letters[j], i));
-          }
-          row.push(<div className="lineBreak"></div>);
-          for (let j = 18; j < 27; j++) {
-            row.push(this.renderTileSquare(j, letters[j], i));
-          }
-          row.push(<div className="lineBreak"></div>);
-          board.push(<div id="tilePile" className="tiles-row">{row}</div>);
-        } else {
-          for (let j = 0; j < 7; j++) {
-            let letter = (i == 1)? this.props.player1Tiles[j] : this.props.player2Tiles[j];
-            row.push(this.renderTileSquare(j, letter, i));
-          }
-          row.push(<div className="lineBreak"></div>);
-          board.push(<div className="tiles-row"><span style={{float: "left", marginRight: "5px", marginTop: "13px"
-        }}>Player {i} Deck</span>{row}</div>);
-        }
-      }
-      return <div id="tiles" style={{height: "200px", width: "650px"}}>{board}</div>;
-    }
-  }
-}
-
-
-class ScoreBoard extends React.Component {
-  render() {
-    if (this.props.game != 2) {
-      return <div></div>;
-    } else {
-      return <div className="scoreBoard">
-                <table>
-                  <thead>
-                    <tr>
-                      <th className="player" style={{backgroundColor:"yellow", cursor:"pointer"}}
-                          onClick={() => this.props.onClick(0)}>
-                        Player 1</th>
-                      <th className="player" style={{backgroundColor:"orange", cursor:"pointer"}}
-                          onClick={() => this.props.onClick(1)}>
-                        Player 2</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><center>{this.props.score[0]}</center></td>
-                      <td><center>{this.props.score[1]}</center></td>
-                    </tr>
-                  </tbody>
-                </table>
-            </div>;
-    }
-  }
-}
-
-
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -306,6 +171,43 @@ class Game extends React.Component {
         this.handleScrabbleText(i);
       }
     }
+  }
+
+  handleConnect4Input(j) {
+    const history = this.state.history.slice(0, this.state.stepNumber+1);
+    const current = history[history.length - 1];
+    const newSquares = current.squares[1].slice();
+    if (calculateConnect4Winner(newSquares)[0]) {
+      return;
+    }
+    let r = 6;
+    let c = 7;
+    let rowX, colX;
+    for (let i = r-1; i >= 0; i--) {
+      if (newSquares[i*c+j] === null) {
+        if (current.player1IsNext) {
+          newSquares[i*c+j] = 'Red';
+        } else {
+          newSquares[i*c+j] = 'Yellow';
+        }
+        rowX = i; 
+        colX = j;
+        break;
+      } else if (i == 0) {
+        return;
+      }
+    }
+    this.setState({
+      history: history.concat([{
+        squares: [current[0], newSquares, current[2]],
+        row: rowX,
+        col: colX,      
+        score: [0, 0],
+        scrabbleWord: "",
+        player1IsNext: !current.player1IsNext
+      }]),
+      stepNumber: history.length,
+    });
   }
 
   handleTileClick(squareNum, squareVal, deck) {
@@ -414,43 +316,6 @@ class Game extends React.Component {
         }
       }
     }
-  }
-
-  handleConnect4Input(j) {
-    const history = this.state.history.slice(0, this.state.stepNumber+1);
-    const current = history[history.length - 1];
-    const newSquares = current.squares[1].slice();
-    if (calculateConnect4Winner(newSquares)[0]) {
-      return;
-    }
-    let r = 6;
-    let c = 7;
-    let rowX, colX;
-    for (let i = r-1; i >= 0; i--) {
-      if (newSquares[i*c+j] === null) {
-        if (current.player1IsNext) {
-          newSquares[i*c+j] = 'Red';
-        } else {
-          newSquares[i*c+j] = 'Yellow';
-        }
-        rowX = i; 
-        colX = j;
-        break;
-      } else if (i == 0) {
-        return;
-      }
-    }
-    this.setState({
-      history: history.concat([{
-        squares: [current[0], newSquares, current[2]],
-        row: rowX,
-        col: colX,      
-        score: [0, 0],
-        scrabbleWord: "",
-        player1IsNext: !current.player1IsNext
-      }]),
-      stepNumber: history.length,
-    });
   }
 
   handleScrabbleText(i) {
@@ -751,15 +616,16 @@ class Game extends React.Component {
               orientation="horizontal"/>
         </div>
         <div className="game-info">
-            <><div>
-              <center><form>
-                <select value={this.state.game} onChange={this.handleGameChange}>
-                  <option value={0}>Tic-Tac-Toe</option>
-                  <option value={1}>Connect Four</option>
-                  <option value={2}>Scrabble</option>
-                </select>
-              </form></center>
-           </div></>
+            <><center>
+                <form>
+                  <select value={this.state.game} onChange={this.handleGameChange}>
+                    <option value={2}>Scrabble</option>
+                    <option value={1}>Connect Four</option>
+                    <option value={0}>Tic-Tac-Toe</option>
+                  </select>
+                </form>
+              </center>
+            </>
             <div id="status"><center>{status}</center></div>
             <div id="scoreContainer">
               <ScoreBoard
@@ -792,93 +658,6 @@ class Game extends React.Component {
         </div>
     );
   }
-}
-
-
-function calculateTTTWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return [squares[a], a, b, c];
-    }
-  }
-  return [null, null, null, null];
-}
-
-
-function calculateConnect4Winner(squares) {
-  let r = 6;
-  let c = 7;
-  for (let i = 0; i < r; i++) {
-    for (let j = 0; j < c-3; j++) {
-      if (squares[i*c+j] && squares[i*c+j] === squares[i*c+j+1] && squares[i*c+j] === squares[i*c+j+2] && squares[i*c+j] === squares[i*c+j+3]) {
-        return [squares[i*c+j], i*c+j, i*c+j+1, i*c+j+2, i*c+j+3];
-      }
-    }
-  }
-  for (let j = 0; j < c; j++) {
-    for (let i = 0; i < r-3; i++) {
-      if (squares[i*c+j] && squares[i*c+j] === squares[(i+1)*c+j] && squares[i*c+j] === squares[(i+2)*c+j] && squares[i*c+j] === squares[(i+3)*c+j]) {
-        return [squares[i*c+j], i*c+j, (i+1)*c+j, (i+2)*c+j, (i+3)*c+j];
-      }
-    }
-  }
-  for (let i = 0; i < r; i++) {
-    for (let j = 0; j < c; j++) {
-      if ((i === 0 && j < 4) || (i < 3 && j === 0)) {
-        if (squares[i*c+j] && squares[i*c+j] === squares[(i+1)*c+j+1] && squares[i*c+j] === squares[(i+2)*c+j+2] && squares[i*c+j] === squares[(i+3)*c+j+3]) {
-          return [squares[i*c+j], i*c+j, (i+1)*c+j+1, (i+2)*c+j+2, (i+3)*c+j+3];
-        }
-      }
-      if ((i === 0 && j > 2) || (i < 3 && j === c-1)) {
-        if (squares[i*c+j] && squares[i*c+j] === squares[(i+1)*c+j-1] && squares[i*c+j] === squares[(i+2)*c+j-2] && squares[i*c+j] === squares[(i+3)*c+j-3]) {
-          return [squares[i*c+j], i*c+j, (i+1)*c+j-1, (i+2)*c+j-2, (i+3)*c+j-3];
-        }
-      }
-      if ((i === r-1 && j < 4) || (i > 2 && j === 0)) {
-        if (squares[i*c+j] && squares[i*c+j] === squares[(i-1)*c+j+1] && squares[i*c+j] === squares[(i-2)*c+j+2] && squares[i*c+j] === squares[(i-3)*c+j+3]) {
-          return [squares[i*c+j], i*c+j, (i-1)*c+j+1, (i-2)*c+j+2, (i-3)*c+j+3];
-        }
-      }
-      if ((i === r-1 && j > 2) || (i > 2 && j === c-1)) {
-        if (squares[i*c+j] && squares[i*c+j] === squares[(i-1)*c+j-1] && squares[i*c+j] === squares[(i-2)*c+j-2] && squares[i*c+j] === squares[(i-3)*c+j-3]) {
-          return [squares[i*c+j], i*c+j, (i-1)*c+j-1, (i-2)*c+j-2, (i-3)*c+j-3];
-        }
-      }
-    }
-  }
-  return [null, null, null, null, null];
-}
-
-
-function calculateScrabbleWinner(score, tilesLeft, player1DeckSize,player2DeckSize) {
-  if (player1DeckSize == 0 || player2DeckSize == 0) {
-    let hope = false;
-    for (let i = 0; i < 27; i++) {
-      if (tilesLeft[i] > 0) {
-        hope = true;
-      }
-    }
-    if (!hope) {
-      if (score[0] > score[1]) {
-        return "Player 1";
-      } else if (score[0] < score[1]) {
-        return "Player 2";
-      }
-    } else {
-      return null;
-    }
-  } 
 }
 
 

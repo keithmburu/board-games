@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import { Tiles, ScoreBoard, ScrabbleBorderLine, calculateScrabbleWinner } from './scrabble.js'
-import { Connect4Input, calculateConnect4Winner } from './connect4.js'
-import { calculateTTTWinner } from './tic-tac-toe.js'
+import './css/index.css';
+import { Tiles, ScoreBoard, ScrabbleBorderLine, calculateScrabbleWinner } from './js/scrabble.js'
+import { Connect4Input, calculateConnect4Winner } from './js/connect4.js'
+import { calculateTTTWinner } from './js/tic-tac-toe.js'
 
 
 function Square(props) {

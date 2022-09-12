@@ -165,7 +165,7 @@ window.addEventListener("parcelhmraccept", ()=>{
 
 },{"react-refresh/runtime":"bJ2t5","react-error-overlay":"1iwOK"}],"bJ2t5":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react-refresh-runtime.development.js");
+module.exports = require("./cjs/react-refresh-runtime.development.js.js");
 
 },{"./cjs/react-refresh-runtime.development.js":"4TvxJ"}],"4TvxJ":[function(require,module,exports) {
 /** @license React v0.9.0
@@ -2764,9 +2764,9 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _client = require("react-dom/client");
 var _clientDefault = parcelHelpers.interopDefault(_client);
 var _indexCss = require("./index.css");
-var _ticTacToeJs = require("./tic-tac-toe.js");
-var _connect4Js = require("./connect4.js");
-var _scrabbleJs = require("./scrabble.js");
+var _ticTacToeJs = require("./tic-tac-toe.js.js");
+var _connect4Js = require("./connect4.js.js");
+var _scrabbleJs = require("./scrabble.js.js");
 function Square(props) {
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
         className: "square",
@@ -3889,7 +3889,7 @@ $RefreshReg$(_c, "Square");
 }
 },{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-dom/client":"lOjBx","./index.css":"irmnC","./tic-tac-toe.js":"dezkA","./connect4.js":"6o17F","./scrabble.js":"8xChS","@parcel/transformer-js/src/esmodule-helpers.js":"k5Ju1","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"hOzcO"}],"iTorj":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
+module.exports = require("./cjs/react-jsx-dev-runtime.development.js.js");
 
 },{"./cjs/react-jsx-dev-runtime.development.js":"48uCM"}],"48uCM":[function(require,module,exports) {
 /**
@@ -4722,7 +4722,7 @@ module.exports = require("./cjs/react-jsx-dev-runtime.development.js");
 
 },{"react":"21dqq"}],"21dqq":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/react.development.js");
+module.exports = require("./cjs/react.development.js.js");
 
 },{"./cjs/react.development.js":"6YvXz"}],"6YvXz":[function(require,module,exports) {
 /**
@@ -6623,7 +6623,7 @@ function checkDCE() {
     // a false positive.
     throw new Error("^_^");
 }
-module.exports = require("./cjs/react-dom.development.js");
+module.exports = require("./cjs/react-dom.development.js.js");
 
 },{"./cjs/react-dom.development.js":"3iA9v"}],"3iA9v":[function(require,module,exports) {
 /**
@@ -27584,7 +27584,7 @@ module.exports = require("./cjs/react-dom.development.js");
 
 },{"react":"21dqq","scheduler":"juvHo"}],"juvHo":[function(require,module,exports) {
 "use strict";
-module.exports = require("./cjs/scheduler.development.js");
+module.exports = require("./cjs/scheduler.development.js.js");
 
 },{"./cjs/scheduler.development.js":"RqdIf"}],"RqdIf":[function(require,module,exports) {
 /**
